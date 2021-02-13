@@ -1,11 +1,28 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class Player {
     String name;
-    int startingFund;
+    int money;
+    ArrayList<Animal> ownedAnimal;
+    ArrayList<Food> ownedFood;
+    boolean isPlayerRemainingInGame = true;
 
-    public Player(String name, int startingFund){
+    public Player(String name, int money){
         this.name = name;
-        this.startingFund = startingFund;
+        this.money = money;
+        this.ownedAnimal = new ArrayList<>();
+        this.ownedFood = new ArrayList<>();
     }
+
+    public int getMoney(){ return this.money;}
+
+    public String getName(){return this.name;}
+
+    public ArrayList<Animal> getOwnedAnimal(){return this.ownedAnimal;}
+
+    public ArrayList<Food> getOwnedFood(){return this.ownedFood;}
+
+    public boolean isPlayerRemainingInGame() {return isPlayerRemainingInGame;}
 }

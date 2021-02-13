@@ -3,6 +3,9 @@ package com.company;
 public class Chicken extends Animal{
 
     public Chicken(String name, String gender, int health){
-        super(name, gender, health);
+        this.name = name;
+        this.gender = gender;
+        this.health = health;
+        this.price = 50;
     }
 }
