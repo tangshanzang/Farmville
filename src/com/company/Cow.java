@@ -6,6 +6,5 @@ public class Cow extends Animal{
         this.name = name;
         this.gender = gender;
         this.health = health;
-        this.price = 250;
     }
 }

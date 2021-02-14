@@ -6,6 +6,6 @@ public class Chicken extends Animal{
         this.name = name;
         this.gender = gender;
         this.health = health;
-        this.price = 50;
+        setPrice(Price.CHICKEN.animalPrice);
     }
 }

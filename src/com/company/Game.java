@@ -9,7 +9,7 @@ public class Game {
     String name;
     int totalRounds, totalPlayers, userInput1, startingFund;
     int round = 1;
-    int roundsLeft = 1;
+    int currentRound = 1;
     int activePlayer = 0;
     ArrayList<Player> players = new ArrayList<>();
     public Store store = new Store();
@@ -87,40 +87,40 @@ public class Game {
         }
         mainGamePreRound();
     }
+
     public void mainGamePreRound(){
-        Dialog.clear();
-        while(roundsLeft <= totalRounds){
+        while(currentRound <= totalRounds){
             while(activePlayer < players.size()){
                 Player player1 = players.get(activePlayer);
+                //Decrease health per round.
                 if(player1.isPlayerRemainingInGame){
-                    mainGameRound();
+                    mainGameRound(player1);
                 }
                 else{
                     System.out.println(player1.getName() + " has became bankrupt, the next player's turn will start.");
                     activePlayer++;
                 }
                 activePlayer = 0;
-                roundsLeft ++;
+                currentRound ++;
             }
         }
     }
 
-    public void mainGameRound(){
-
-    }
-
-    public void EveryRoundMenu(){
+    public void mainGameRound(Player player){
+        System.out.println("-".repeat(50));
+        System.out.println("Turn: " + currentRound);
+        System.out.println("Hello " + player);
         userInput1 = Dialog.menu("What would you like to do?","Buy new Animals","Buy new Food","Feed my Animals",
                 "Mate my Animals", "Sell my Animals");
         switch (userInput1){
-            case 1 -> { store.BuyNewAnimals();}
+            case 1 -> { store.BuyNewAnimalsMenu(player);}
             case 2 -> { }
             case 3 -> { }
             case 4 -> { }
             case 5 -> { }
         }
-
     }
+
     public int getRound() {
         return round;
     }

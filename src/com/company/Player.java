@@ -18,6 +18,8 @@ public class Player {
 
     public int getMoney(){ return this.money;}
 
+    public void setMoney(int money){ this.money = money;}
+
     public String getName(){return this.name;}
 
     public ArrayList<Animal> getOwnedAnimal(){return this.ownedAnimal;}
