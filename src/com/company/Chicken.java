@@ -2,10 +2,7 @@ package com.company;
 
 public class Chicken extends Animal{
 
-    public Chicken(String name, String gender, int health){
-        this.name = name;
-        this.gender = gender;
-        this.health = health;
+    public Chicken(){
         setPrice(Price.CHICKEN.animalPrice);
     }
 }

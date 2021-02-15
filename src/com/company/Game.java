@@ -92,24 +92,25 @@ public class Game {
         while(currentRound <= totalRounds){
             while(activePlayer < players.size()){
                 Player player1 = players.get(activePlayer);
-                //Decrease health per round.
+                //Decrease health per round needed
+                //Display detailed current player's info needed
                 if(player1.isPlayerRemainingInGame){
                     mainGameRound(player1);
                 }
                 else{
                     System.out.println(player1.getName() + " has became bankrupt, the next player's turn will start.");
-                    activePlayer++;
                 }
-                activePlayer = 0;
-                currentRound ++;
+                activePlayer++; //fixed a bug where player 2-4 never get to their turn, placed activePlayer++ in else column
             }
+            activePlayer = 0;
+            currentRound ++;
         }
     }
 
     public void mainGameRound(Player player){
         System.out.println("-".repeat(50));
         System.out.println("Turn: " + currentRound);
-        System.out.println("Hello " + player);
+        System.out.println("Hello " + player.getName());
         userInput1 = Dialog.menu("What would you like to do?","Buy new Animals","Buy new Food","Feed my Animals",
                 "Mate my Animals", "Sell my Animals");
         switch (userInput1){
@@ -120,11 +121,6 @@ public class Game {
             case 5 -> { }
         }
     }
-
-    public int getRound() {
-        return round;
-    }
-
     private void showOwnedFood(Player player){
         System.out.println("----------Your food----------");
         for(int i = 0; i < player.getOwnedFood().size(); i++){
@@ -140,6 +136,10 @@ public class Game {
             System.out.println("Health: " + player.getOwnedAnimal().get(i).getHealth());
             System.out.println("");
         }
+    }
+
+    public int getRound() {
+        return round;
     }
 
     public void ShowPlayerInfo(Player player) {

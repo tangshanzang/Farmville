@@ -54,7 +54,7 @@ public class Dialog {
     }
 
     public static void enterOrRandomName(Animal animal){
-        System.out.println("Would you like to enter name for your " + animal.getType() + " or let get a random name?");
+        System.out.println("Would you like to enter name for your " + animal.getType() + " or let it get a random name?");
         System.out.println("1. Enter name.");
         System.out.println("2. Random name.");
         String choice = myScanner.nextLine();
@@ -76,8 +76,10 @@ public class Dialog {
                         System.out.println("We will name it " + animal.getName());
                     }
                 }
+                pass = false;
             }
         }
+        System.out.println("");
     }
 
     public static String randomName(Animal animal) {
@@ -99,7 +101,7 @@ public class Dialog {
                     "Maokai"
             };
             name = maleNames[random.nextInt(maleNames.length)];
-            System.out.println(name);
+            // Deleted println name, to avoid display of the name. As it is already displayed in enterOrRandomName method.
         } else if (animal.getGender().equalsIgnoreCase("Female")) {
             String[] femaleNames = {
                     "Miss Fortune",
@@ -115,10 +117,29 @@ public class Dialog {
                     "Miss Sundae"
             };
             name = femaleNames[random.nextInt(femaleNames.length)];
-            System.out.println(name);
+            // Deleted println name, to avoid display of the name. As it is already displayed in enterOrRandomName method.
         }
         return name;
     }
+    public static void selectGender(Animal animal){
+        System.out.println("Do you want a Male or Female?");
+        System.out.println("1. Male");
+        System.out.println("2. Female");
+        System.out.println("3. Random");
+        String userInput = myScanner.nextLine();
+        switch (userInput){
+            case "1" -> { animal.setGender("Male");}
+            case "2" -> { animal.setGender("Female");}
+            case "3" -> {
+                String gender[] = {"Male","Female"};
+                Random random = new Random();
+                String randomedGender = gender[random.nextInt(gender.length)];
+                animal.setGender(randomedGender);
+                System.out.println("Your new " + animal.getType() + " is a " + randomedGender);
+            }
+        }
+    }
+
     public static int askForQuantity(){
         System.out.println("How many would you like to buy?");
         int input = myScanner.nextInt();
