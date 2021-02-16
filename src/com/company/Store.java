@@ -1,5 +1,6 @@
 package com.company;
 
+import java.awt.*;
 import java.util.Scanner;
 
 public class Store {
@@ -25,7 +26,8 @@ public class Store {
     }
 
     public void BuyNewAnimalsMenu(Player player){
-        userInput1 = Dialog.menu("Store","Buy Chicken / 50 Gold","Buy Cow / 250 Gold","Buy Horse / 250 Gold","Buy Pig / 150 Gold","Buy Sheep / 150 Gold");
+        userInput1 = Dialog.menu("Animal Store","Buy Chicken - 50 Gold per st","Buy Cow - 250 Gold per st","Buy Horse - 250 Gold per st",
+                "Buy Pig - 150 Gold per st","Buy Sheep - 150 Gold per st");
         switch (userInput1){
             case 1 -> {
                 BuyNewAnimals(player, Animal.Price.CHICKEN.animalPrice, userInput1);
@@ -89,9 +91,31 @@ public class Store {
 
     }
 
-    public void BuyNewFood(){
-
+    public void BuyNewFoodMenu(Player player){
+        userInput1 = Dialog.menu("Food Store","Buy Corn - 15 Gold per kg","Buy Grass - 20 Gold per kg ","Buy Millet - 10 Gold per kg");
+        switch (userInput1){
+            case 1 ->{BuyAndAddNewFood(player, Food.Price.CORN.foodPrice, userInput1);}
+            case 2 ->{BuyAndAddNewFood(player, Food.Price.GRASS.foodPrice, userInput1);}
+            case 3 ->{BuyAndAddNewFood(player, Food.Price.MILLET.foodPrice, userInput1);}
+        }
     }
+
+    public void BuyAndAddNewFood(Player player, int price, int userInput1){
+        System.out.println("Your gold: " + player.getMoney());
+        int quantity = Dialog.askForQuantity();
+        int totalCost = Dialog.totalCost(price, quantity);
+        System.out.println("");
+        if(enoughMoney(totalCost,player)){
+                player.setMoney(player.getMoney() - totalCost);
+                switch(userInput1){
+                    case 1 -> {player.ownedFood.get(0).setFoodAmount(quantity);}
+                    case 2 -> {player.ownedFood.get(1).setFoodAmount(quantity);}
+                    case 3 -> {player.ownedFood.get(2).setFoodAmount(quantity);}
+                }
+            }
+            System.out.println("Trade has been done\n");
+            System.out.println("Your gold: " + player.getMoney());
+        }
 
     public void FeedMyAnimals(){
 

@@ -1,10 +1,12 @@
 package com.company;
 
 import java.util.ArrayList;
+import com.company.Food;
 
 public class Player {
     String name;
     int money;
+    int kg;
     ArrayList<Animal> ownedAnimal;
     ArrayList<Food> ownedFood;
     boolean isPlayerRemainingInGame = true;
@@ -14,11 +16,16 @@ public class Player {
         this.money = money;
         this.ownedAnimal = new ArrayList<>();
         this.ownedFood = new ArrayList<>();
+        ownedFood.add(new Corn(0));
+        ownedFood.add(new Grass(0));
+        ownedFood.add(new Millet(0));
     }
 
     public int getMoney(){ return this.money;}
 
     public void setMoney(int money){ this.money = money;}
+
+    public void setFoodAmount(int kg){ this.kg = kg;}
 
     public String getName(){return this.name;}
 
@@ -27,4 +34,5 @@ public class Player {
     public ArrayList<Food> getOwnedFood(){return this.ownedFood;}
 
     public boolean isPlayerRemainingInGame() {return isPlayerRemainingInGame;}
+
 }

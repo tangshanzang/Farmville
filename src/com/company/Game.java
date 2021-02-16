@@ -115,7 +115,7 @@ public class Game {
                 "Mate my Animals", "Sell my Animals");
         switch (userInput1){
             case 1 -> { store.BuyNewAnimalsMenu(player);}
-            case 2 -> { }
+            case 2 -> { store.BuyNewFoodMenu(player);}
             case 3 -> { }
             case 4 -> { }
             case 5 -> { }
@@ -124,7 +124,7 @@ public class Game {
     private void showOwnedFood(Player player){
         System.out.println("----------Your food----------");
         for(int i = 0; i < player.getOwnedFood().size(); i++){
-            System.out.println("Food: " + player.getOwnedFood().get(i) + " " + player.getOwnedFood().get(i).FoodAmount());
+            System.out.println("Food: " + player.getOwnedFood().get(i) + " " + player.getOwnedFood().get(i).getFoodAmount());
         }
     }
 

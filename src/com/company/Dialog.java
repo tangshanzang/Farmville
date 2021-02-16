@@ -5,8 +5,6 @@ import java.util.Scanner;
 public class Dialog {
 
     static public Scanner myScanner = new Scanner(System.in);
-    int playerMoney;
-    int animalPrice;
     static boolean pass = false;
 
     static public void clear(){
