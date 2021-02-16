@@ -22,4 +22,5 @@ public abstract class Food {
     public int getFoodPrice(){ return this.price;}
 
     public void setFoodPrice(int price){ this.price = price;}
+
 }

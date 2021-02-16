@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import com.company.Food;
 
 public class Player {
     String name;

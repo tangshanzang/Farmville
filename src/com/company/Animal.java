@@ -4,6 +4,8 @@ public abstract class Animal {
     String name, gender;
     int health, price;
     int startingHealth = 100;
+    public static boolean canEat = true;
+    public static String canNotEat = "I can't eat that kind of food!";
 
     public Animal(){
 
@@ -19,6 +21,10 @@ public abstract class Animal {
         Price(int animalPrice){ this.animalPrice = animalPrice;}
     }
 
+    public static boolean checkIfCanEat(Player player, Food food){
+       return canEat;
+    }
+
     public int getPrice(){return this.price;}
 
     public void setPrice(int price){this.price = price;}
@@ -30,10 +36,6 @@ public abstract class Animal {
     public String getName(){return this.name;}
 
     public void setName(String name){ this.name = name;}
-
-    public String getType() {
-        return this.getClass().getSimpleName();
-    }
 
     public String getGender(){return this.gender;}
 

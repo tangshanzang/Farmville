@@ -116,11 +116,163 @@ public class Game {
         switch (userInput1){
             case 1 -> { store.BuyNewAnimalsMenu(player);}
             case 2 -> { store.BuyNewFoodMenu(player);}
-            case 3 -> { }
+            case 3 -> { feed(player);}
             case 4 -> { }
             case 5 -> { }
         }
     }
+
+    public void feed(Player player) {
+        for (Animal animal : player.ownedAnimal) {
+            int choice = 0;
+            while (choice != 4) {
+                System.out.println("What would you want to feed your " + animal.getClass().getSimpleName() + "-" + animal.getName());
+                choice = Dialog.menuWithOutQuestion("Corn", "Grass", "Millet", "Next Animal");
+
+                switch (choice) {
+                    case 1 -> {
+                        //BUG, BOOLEAN DOES NOT WORK PROPERLY --
+                        //Fixed
+                        if (!(animal.getClass().getSimpleName().equalsIgnoreCase("pig"))) {
+                            System.out.println("Your " + animal.getClass().getSimpleName() + " can not eat " + player.ownedFood.get(0).getClass().getSimpleName());
+                        } else if (player.ownedFood.get(0).getFoodAmount() == 0) {
+                            System.out.println("We are out of corn! " + animal.getClass().getSimpleName() + "-" + animal.getName() + " will starve this turn");
+                            System.out.println("Get more corn!");
+                        } else if (animal.getClass().getSimpleName().equalsIgnoreCase("pig") && player.ownedFood.get(0).getFoodAmount() > 0) {
+                            player.ownedFood.get(0).setFoodAmount((player.ownedFood.get(0).getFoodAmount() - 1));
+                            animal.setHealth((animal.getHealth() + 10));
+                            System.out.println("1 kg " + player.ownedFood.get(0).getClass().getSimpleName() + " has been consumed");
+                            choice = 4;
+                        }
+                    }
+                    case 2 -> {
+                        if (!(animal.getClass().getSimpleName().equalsIgnoreCase("cow") ||
+                                (animal.getClass().getSimpleName().equalsIgnoreCase("horse")) ||
+                                (animal.getClass().getSimpleName().equalsIgnoreCase("sheep")))) {
+                            System.out.println("Your " + animal.getClass().getSimpleName() + " can not eat " + player.ownedFood.get(1).getClass().getSimpleName());
+                        } else if (player.ownedFood.get(1).getFoodAmount() == 0) {
+                            System.out.println("We are out of grass! " + animal.getClass().getSimpleName() + "-" + animal.getName() + " will starve this turn");
+                            System.out.println("Get more grass!");
+                        } else if (animal.getClass().getSimpleName().equalsIgnoreCase("cow") ||
+                                (animal.getClass().getSimpleName().equalsIgnoreCase("horse")) ||
+                                (animal.getClass().getSimpleName().equalsIgnoreCase("sheep")) && player.ownedFood.get(1).getFoodAmount() > 0) {
+
+                            player.ownedFood.get(1).setFoodAmount((player.ownedFood.get(1).getFoodAmount() - 1));
+                            animal.setHealth((animal.getHealth() + 10));
+                            System.out.println("1 kg " + player.ownedFood.get(0).getClass().getSimpleName() + " has been consumed");
+                            choice = 4;
+                        }
+                    }
+                    case 3 -> {
+                        if (!(animal.getClass().getSimpleName().equalsIgnoreCase("chicken"))) {
+                            System.out.println("Your " + animal.getClass().getSimpleName() + " can not eat " + player.ownedFood.get(2).getClass().getSimpleName());
+                        } else if (player.ownedFood.get(2).getFoodAmount() == 0) {
+                            System.out.println("We are out of millet! " + animal.getClass().getSimpleName() + "-" + animal.getName() + " is starving!");
+                            System.out.println("Get more millet!");
+                        } else if (animal.getClass().getSimpleName().equalsIgnoreCase("chicken") && player.ownedFood.get(2).getFoodAmount() > 0) {
+                            player.ownedFood.get(2).setFoodAmount((player.ownedFood.get(2).getFoodAmount() - 1));
+                            animal.setHealth((animal.getHealth() + 10));
+                            System.out.println("1 kg " + player.ownedFood.get(0).getClass().getSimpleName() + " has been consumed");
+                            choice = 4;
+                        }
+                    }
+                    case 4 ->{
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+    public void FeedMyAnimals(Player player){
+        // Right now player doesnt need to select food to feed to animals as each animal only accept one kind of food
+        // Will change at least one of the animal so player can choose what they wanna feed this animal to show that i know how to do it **
+        // Change in sub animal classes needed **
+
+        int cornConsumed = 0;
+        int grassConsumed = 0;
+        int milletConsumed = 0;
+        // Keep track of food consumed for this turn
+
+        for(int i = 0; i < player.ownedAnimal.size(); i++){
+            int corn = player.ownedFood.get(0).getFoodAmount();
+            int grass = player.ownedFood.get(1).getFoodAmount();
+            int millet = player.ownedFood.get(2).getFoodAmount();
+            int health = player.ownedAnimal.get(i).getHealth();
+            // Get health needed **
+            // Done, each time animal is fed, health +10
+            // Current health should be updated each time the loop runs
+
+            if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("CHICKEN")
+                    && millet > 0){
+                millet--;
+                player.ownedFood.get(2).setFoodAmount(millet);
+                player.ownedAnimal.get(i).setHealth(health+10);
+                milletConsumed++;
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("COW")
+                    && grass > 0){
+                grass--;
+                player.ownedFood.get(1).setFoodAmount(grass);
+                player.ownedAnimal.get(i).setHealth(health+10);
+                grassConsumed++;
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("Horse")
+                    && grass > 0){
+                grass--;
+                player.ownedFood.get(1).setFoodAmount(grass);
+                player.ownedAnimal.get(i).setHealth(health+10);
+                grassConsumed++;
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("PIG")
+                    && corn > 0){
+                corn--;
+                player.ownedFood.get(0).setFoodAmount(corn);
+                player.ownedAnimal.get(i).setHealth(health+10);
+                cornConsumed++;
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("Sheep")
+                    && millet > 0){
+                grass--;
+                player.ownedFood.get(1).setFoodAmount(grass);
+                player.ownedAnimal.get(i).setHealth(health+10);
+                grassConsumed++;
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("CHICKEN")
+                    && millet == 0){
+                System.out.println("We are out of millet! Your Chicken "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("Cow")
+                    && grass == 0){
+                System.out.println("We are out of grass! Your cow "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("horse")
+                    && grass == 0){
+                System.out.println("We are out of grass! Your horse "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("pig")
+                    && corn == 0){
+                System.out.println("We are out of corn! Your pig "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
+            }
+            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("sheep")
+                    && grass == 0){
+                System.out.println("We are out of grass! Your sheep "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
+            }
+
+            System.out.println("Animals has been fed");
+            System.out.println("Food consumed:");
+            System.out.println("Corn: " + cornConsumed + " kg");
+            System.out.println("Grass: " + grassConsumed + " kg");
+            System.out.println("Millet: " + milletConsumed + " kg\n");
+            cornConsumed = 0;
+            grassConsumed = 0;
+            milletConsumed = 0;
+            // After displaying the food consumed, reset the tracker to 0 in order to function for next turn
+        }
+    }
+    */
+
+    /*
     private void showOwnedFood(Player player){
         System.out.println("----------Your food----------");
         for(int i = 0; i < player.getOwnedFood().size(); i++){
@@ -159,6 +311,5 @@ public class Game {
         }
 
         System.out.println();
-    }
-
+    }*/
 }

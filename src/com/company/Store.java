@@ -5,8 +5,6 @@ import java.util.Scanner;
 
 public class Store {
 
-
-
     public Store(){
 
     }
@@ -25,26 +23,30 @@ public class Store {
         return player.getMoney() >= cost;
     }
 
-    public void BuyNewAnimalsMenu(Player player){
-        userInput1 = Dialog.menu("Animal Store","Buy Chicken - 50 Gold per st","Buy Cow - 250 Gold per st","Buy Horse - 250 Gold per st",
-                "Buy Pig - 150 Gold per st","Buy Sheep - 150 Gold per st");
-        switch (userInput1){
-            case 1 -> {
-                BuyNewAnimals(player, Animal.Price.CHICKEN.animalPrice, userInput1);
-                //ADD ANIMALS!--
-                //Done, add animals to player has been added as method to BuyNewAnimals
-            }
-            case 2 -> {
-                BuyNewAnimals(player, Animal.Price.COW.animalPrice, userInput1);
-            }
-            case 3 -> {
-                BuyNewAnimals(player, Animal.Price.HORSE.animalPrice, userInput1);
-            }
-            case 4 -> {
-                BuyNewAnimals(player, Animal.Price.PIG.animalPrice, userInput1);
-            }
-            case 5 -> {
-                BuyNewAnimals(player, Animal.Price.SHEEP.animalPrice, userInput1);
+    public void BuyNewAnimalsMenu(Player player) {
+        userInput1 = 0;
+        while (userInput1 != 6) {
+            userInput1 = Dialog.menu("Animal Store", "Buy Chicken - 50 Gold per st", "Buy Cow - 250 Gold per st", "Buy Horse - 250 Gold per st",
+                    "Buy Pig - 150 Gold per st", "Buy Sheep - 150 Gold per st","Leave Animal Store ( Your turn will end )");
+            switch (userInput1) {
+                case 1 -> {
+                    BuyNewAnimals(player, Animal.Price.CHICKEN.animalPrice, userInput1);
+                    //ADD ANIMALS!--
+                    //Done, add animals to player has been added as method to BuyNewAnimals
+                }
+                case 2 -> {
+                    BuyNewAnimals(player, Animal.Price.COW.animalPrice, userInput1);
+                }
+                case 3 -> {
+                    BuyNewAnimals(player, Animal.Price.HORSE.animalPrice, userInput1);
+                }
+                case 4 -> {
+                    BuyNewAnimals(player, Animal.Price.PIG.animalPrice, userInput1);
+                }
+                case 5 -> {
+                    BuyNewAnimals(player, Animal.Price.SHEEP.animalPrice, userInput1);
+                }
+                case 6 -> {}
             }
         }
     }
@@ -69,11 +71,6 @@ public class Store {
             }
             System.out.println("Trade has been done\n");
             System.out.println("Your gold: " + player.getMoney());
-            for(int i = 0; i < player.ownedAnimal.size(); i++){
-                System.out.println("Name: " + player.ownedAnimal.get(i).getName());
-                System.out.println("Health: " + player.ownedAnimal.get(i).getHealth());
-                System.out.println("Gender: " + player.ownedAnimal.get(i).getGender());
-            }
         }
         else{
             System.out.println("You don't have enough money!");
@@ -91,12 +88,22 @@ public class Store {
 
     }
 
-    public void BuyNewFoodMenu(Player player){
-        userInput1 = Dialog.menu("Food Store","Buy Corn - 15 Gold per kg","Buy Grass - 20 Gold per kg ","Buy Millet - 10 Gold per kg");
-        switch (userInput1){
-            case 1 ->{BuyAndAddNewFood(player, Food.Price.CORN.foodPrice, userInput1);}
-            case 2 ->{BuyAndAddNewFood(player, Food.Price.GRASS.foodPrice, userInput1);}
-            case 3 ->{BuyAndAddNewFood(player, Food.Price.MILLET.foodPrice, userInput1);}
+    public void BuyNewFoodMenu(Player player) {
+        userInput1 = 0;
+        while (userInput1 != 4) {
+            userInput1 = Dialog.menu("Food Store", "Buy Corn - 15 Gold per kg", "Buy Grass - 20 Gold per kg ", "Buy Millet - 10 Gold per kg","Leave Food Store ( Your turn will end )");
+            switch (userInput1) {
+                case 1 -> {
+                    BuyAndAddNewFood(player, Food.Price.CORN.foodPrice, userInput1);
+                }
+                case 2 -> {
+                    BuyAndAddNewFood(player, Food.Price.GRASS.foodPrice, userInput1);
+                }
+                case 3 -> {
+                    BuyAndAddNewFood(player, Food.Price.MILLET.foodPrice, userInput1);
+                }
+                case 4 ->{}
+            }
         }
     }
 
@@ -117,9 +124,6 @@ public class Store {
             System.out.println("Your gold: " + player.getMoney());
         }
 
-    public void FeedMyAnimals(){
-
-    }
 
     public void MateMyAnimals(){
 
