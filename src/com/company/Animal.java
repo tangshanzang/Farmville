@@ -1,11 +1,12 @@
 package com.company;
 
 public abstract class Animal {
-    String name, gender;
+    String name;
     int health, price;
     int startingHealth = 100;
-    public static boolean canEat = true;
-    public static String canNotEat = "I can't eat that kind of food!";
+    int offSpringLeft;
+    int maxOffSpring;
+    String gender = "male";
 
     public Animal(){
 
@@ -19,10 +20,6 @@ public abstract class Animal {
         SHEEP(150);
         public int animalPrice;
         Price(int animalPrice){ this.animalPrice = animalPrice;}
-    }
-
-    public static boolean checkIfCanEat(Player player, Food food){
-       return canEat;
     }
 
     public int getPrice(){return this.price;}
@@ -40,5 +37,11 @@ public abstract class Animal {
     public String getGender(){return this.gender;}
 
     public void setGender(String gender){this.gender = gender;}
+
+    public int getOffSpringLeft(){return this.offSpringLeft;}
+
+    public void setOffSpringLeft(int offSpringLeft){this.offSpringLeft = offSpringLeft;}
+
+    public int getMaxOffSpring(){return maxOffSpring;}
 }
 

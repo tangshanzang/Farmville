@@ -34,7 +34,10 @@ public class Dialog {
         int num = min - 1;
         try {
             //Bug, why enter does not work?
-            num = myScanner.nextInt();
+            //fixed, nextInt left enter behind it
+            Scanner myScanner2 = new Scanner(System.in);
+            num = myScanner2.nextInt();
+            myScanner2.nextLine();
             if (num < min || num > max) {
                 System.out.println(numberOutOfRange);
             }
@@ -99,7 +102,7 @@ public class Dialog {
                 while (!pass) {
                     String name = Dialog.randomName(animal);
                     System.out.println("Should we name it: " + name + "? ");
-                    System.out.println("Yes/No");
+                    System.out.println("Yes/No (Type anything else to re-roll)");
                     String stringInput = myScanner.nextLine();
                     if (stringInput.equalsIgnoreCase("Yes")) {
                         animal.setName(name);
@@ -188,8 +191,30 @@ public class Dialog {
             return totalCost;
         }
 
-        public void testFeedFood (){
+        public static void printPlayerStatus (Player player){
+        int index = 1;
 
+            System.out.println("-".repeat(50));
+            System.out.println("Owned animals: ");
+            if(player.ownedAnimal.size()!=0) {
+                for (Animal animal : player.ownedAnimal) {
+                    System.out.println(index + ". Breed: " + animal.getClass().getSimpleName() + ". Name: " + animal.getName() + ". Gender: " + animal.getGender() + ". Health: " + animal.getHealth() + ". Breed chance left: " + animal.getOffSpringLeft());
+                    index++;
+                }
+            }
+            else{
+                System.out.println("You don't own any animal yet");
+            }
+            System.out.println("-".repeat(50));
+            System.out.println("Owned food: ");
+            if(player.ownedFood.size()!=0) {
+                for (Food food : player.ownedFood) {
+                    System.out.println("Type: " + food.getClass().getSimpleName() + ". " + food.getFoodAmount() + " kg");
+                }
+            }
+            else{
+                System.out.println("You don't own any food yet");
+            }
         }
     }
 

@@ -4,10 +4,8 @@ public class Chicken extends Animal{
 
     public Chicken(){
         setPrice(Price.CHICKEN.animalPrice);
+        maxOffSpring = 10;
+        offSpringLeft = 10;
     }
 
-    public static boolean checkIfCanEat(Player player, Food food){
-        canEat = food.getClass().equals(player.ownedFood.get(2).getClass());
-        return canEat;
-    }
 }

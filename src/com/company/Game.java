@@ -1,7 +1,10 @@
 package com.company;
 import java.awt.*;
 import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -23,8 +26,8 @@ public class Game {
         System.out.println("Welcome to FarmVille!");
         System.out.println("-".repeat(50));
         System.out.println("In this game, you and your friends will compete with each other by managing a farm. ");
-        System.out.println("You can buy, sell, feed, mate your animals to generate profits.");
-        System.out.println("As you progress, your animals can get sick and die if they are not taken good cared off, so be careful with that!");
+        System.out.println("You can buy, sell, feed, breed your animals to generate profits.");
+        System.out.println("As you progress, your animals can get worse health and die if they are not taken good cared off, so be careful with that!");
         System.out.println("When the game ends, all your animals will be turned into gold, the player with the most gold wins the game.");
         System.out.println("We will now let you modify the game setting, good luck, my friends!");
         TotalRounds();
@@ -92,8 +95,15 @@ public class Game {
         while(currentRound <= totalRounds){
             while(activePlayer < players.size()){
                 Player player1 = players.get(activePlayer);
-                //Decrease health per round needed
-                //Display detailed current player's info needed
+
+                if(player1.ownedAnimal.size() == 0 && player1.getMoney() == 0){
+                    player1.isPlayerRemainingInGame = false;
+                }
+
+                //Decrease health per round needed--
+                //Die when health reaches 0 needed--
+                //Display detailed current player's info needed--
+                //Done, these has been put in mainGameRound and decreaseHealthPreTurn;
                 if(player1.isPlayerRemainingInGame){
                     mainGameRound(player1);
                 }
@@ -105,20 +115,160 @@ public class Game {
             activePlayer = 0;
             currentRound ++;
         }
+        //sell all animals after last round
+        Player player1;
+        Player player2;
+        Player player3;
+        Player player4;
+        Player winner;
+        System.out.println("-".repeat(50));
+        for (int i = 0; i < totalPlayers; i++){
+            for (Animal animal : players.get(i).ownedAnimal){
+                players.get(i).setMoney(players.get(i).getMoney() + (animal.getPrice() * (animal.getHealth() / 100)));
+            }
+            System.out.println("Player: " + players.get(i).getName());
+            System.out.println("Gold: " + players.get(i).getMoney());
+            System.out.println("-".repeat(50));
+        }
+
+        //Compare cash
+        //Could use compare or sort, but want to do this with my current knowledge
+        switch (totalPlayers){
+            case 1 -> {
+                player1 = players.get(0);
+                winner = player1;
+                System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+            case 2 -> {
+                player1 = players.get(0);
+                player2 = players.get(1);
+                if (player1.getMoney() > player2.getMoney())
+                {
+                    winner = player1;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player2.getMoney() > player1.getMoney())
+                {
+                    winner = player2;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else{
+                    System.out.println(player1.getName() + " and " + player2.getName() + " both took 1st place!");
+                    System.out.println("They both have " + player1.getMoney() + " gold");
+                }
+            }
+            case 3 -> {
+                player1 = players.get(0);
+                player2 = players.get(1);
+                player3 = players.get(2);
+                if (player1.getMoney() > player2.getMoney() && player1.getMoney() > player3.getMoney()){
+                    winner = player1;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player2.getMoney() > player1.getMoney() && player2.getMoney() > player3.getMoney()){
+                    winner = player2;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player3.getMoney() > player1.getMoney() && player3.getMoney() > player2.getMoney()){
+                    winner = player3;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player1.getMoney() == player2.getMoney() && player1.getMoney() == player3.getMoney()){
+                    System.out.println(player1.getName() + ", " + player2.getName() + " and " +
+                            player3.getName() + " all took 1st place!");
+                    System.out.println("They all have " + player1.getMoney() + " gold");
+                }
+            }
+            case 4 -> {
+                player1 = players.get(0);
+                player2 = players.get(1);
+                player3 = players.get(2);
+                player4 = players.get(3);
+                if (player1.getMoney() > player2.getMoney() && player1.getMoney() > player3.getMoney() &&
+                player1.getMoney() > player4.getMoney()){
+                    winner = player1;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player2.getMoney() > player1.getMoney() && player2.getMoney() > player3.getMoney() &&
+                player2.getMoney() > player4.getMoney()){
+                    winner = player2;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player3.getMoney() > player1.getMoney() && player3.getMoney() > player2.getMoney() &&
+                player3.getMoney() > player4.getMoney()){
+                    winner = player3;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player4.getMoney() > player1.getMoney() && player4.getMoney() > player2.getMoney() &&
+                player4.getMoney() > player3.getMoney()){
+                    winner = player4;
+                    System.out.println("Congratz! " + winner.getName() + " is the winner!");
+                    System.out.println(winner.getName() + " has " + winner.getMoney() + " gold");
+                }
+                else if (player1.getMoney() == player2.getMoney() && player1.getMoney() == player3.getMoney() &&
+                        player1.getMoney() == player4.getMoney()){
+                    System.out.println(player1.getName() + ", " + player2.getName() + ", " +
+                            player3.getName() + " and " + player4.getName() + " all took 1st place!");
+                    System.out.println("They all have " + player1.getMoney() + " gold");
+                }
+            }
+        }
+    }
+    public void decreaseHealthPreTurn(Player player){
+        for (int i = 0; i < player.ownedAnimal.size(); i++){
+            Random random = new Random();
+            int number = random.nextInt(30-10 + 1) + 10;
+            player.ownedAnimal.get(i).setHealth(player.ownedAnimal.get(i).getHealth()-number);//EVERY animal will get a random health decrease per turn
+            System.out.println(player.ownedAnimal.get(i).getClass().getSimpleName() + " - " + player.ownedAnimal.get(i).getName() + "'s health has been decrease by " + number);
+
+            if(player.ownedAnimal.get(i).getHealth() <= 0){
+                System.out.println(player.ownedAnimal.get(i).getClass().getSimpleName() + " - " + player.ownedAnimal.get(i).getName() + " died! ");
+                player.ownedAnimal.remove(player.ownedAnimal.get(i));
+                i--; // Added i-- since when index i gets removed, everything moved one step to the left, so what was at index 1 is now at index 0
+                // while since i++, the old index 1 would skip the loop
+            }
+        }
     }
 
-    public void mainGameRound(Player player){
+    public void mainGameRound(Player player) {
         System.out.println("-".repeat(50));
-        System.out.println("Turn: " + currentRound);
-        System.out.println("Hello " + player.getName());
-        userInput1 = Dialog.menu("What would you like to do?","Buy new Animals","Buy new Food","Feed my Animals",
-                "Mate my Animals", "Sell my Animals");
-        switch (userInput1){
-            case 1 -> { store.BuyNewAnimalsMenu(player);}
-            case 2 -> { store.BuyNewFoodMenu(player);}
-            case 3 -> { feed(player);}
-            case 4 -> { }
-            case 5 -> { }
+        if (currentRound == totalRounds) {
+            System.out.println("Turn: This is the last round!");
+        } else {
+            System.out.println("Turn: " + currentRound);
+        }
+        System.out.println("Player: " + player.getName());
+        System.out.println("Gold: " + player.getMoney());
+        System.out.println("-".repeat(50));
+        decreaseHealthPreTurn(player); // Decrease health each turn
+        Dialog.printPlayerStatus(player); // Show detailed info at round start
+        userInput1 = Dialog.menu("What would you like to do?", "Buy new Animals", "Buy new Food", "Feed my Animals",
+                "Breed my Animals", "Sell my Animals");
+        switch (userInput1) {
+            case 1 -> {
+                store.BuyNewAnimalsMenu(player);
+            }
+            case 2 -> {
+                store.BuyNewFoodMenu(player);
+            }
+            case 3 -> {
+                feed(player);
+            }
+            case 4 -> {
+                breedMyAnimal(player);
+            }
+            case 5 -> {
+                sellAnimal(player);
+            }
         }
     }
 
@@ -126,13 +276,14 @@ public class Game {
         for (Animal animal : player.ownedAnimal) {
             int choice = 0;
             while (choice != 4) {
-                System.out.println("What would you want to feed your " + animal.getClass().getSimpleName() + "-" + animal.getName());
+                System.out.println("What would you want to feed your " + animal.getClass().getSimpleName() + " - " + animal.getName());
                 choice = Dialog.menuWithOutQuestion("Corn", "Grass", "Millet", "Next Animal");
 
                 switch (choice) {
                     case 1 -> {
                         //BUG, BOOLEAN DOES NOT WORK PROPERLY --
                         //Fixed
+                        //Another way of doing it would be to set up food requirement in their class, would be easier;
                         if (!(animal.getClass().getSimpleName().equalsIgnoreCase("pig"))) {
                             System.out.println("Your " + animal.getClass().getSimpleName() + " can not eat " + player.ownedFood.get(0).getClass().getSimpleName());
                         } else if (player.ownedFood.get(0).getFoodAmount() == 0) {
@@ -183,133 +334,153 @@ public class Game {
         }
     }
 
-    /*
-    public void FeedMyAnimals(Player player){
-        // Right now player doesnt need to select food to feed to animals as each animal only accept one kind of food
-        // Will change at least one of the animal so player can choose what they wanna feed this animal to show that i know how to do it **
-        // Change in sub animal classes needed **
+    public void breedMyAnimal(Player player){
+        int index = 1;
+        boolean pass = false;
+        Animal partnerA = null;
+        ArrayList<Animal> partnerBList = new ArrayList<>();
+        System.out.println("-".repeat(50));
+        System.out.println("Your animals: ");
+        for(Animal animalInList : player.ownedAnimal){
+            System.out.println(index + ". " + animalInList.getClass().getSimpleName() + ". Name: " + animalInList.getName() + ", Health: " + animalInList.getHealth() + ", Gender: " + animalInList.getGender()
+            + ". Breed chance left: " + animalInList.getOffSpringLeft());
+            index++;
+        }
+        System.out.println(index + ". Leave Animal Store (Your turn will end)");
+        System.out.println("-".repeat(50));
 
-        int cornConsumed = 0;
-        int grassConsumed = 0;
-        int milletConsumed = 0;
-        // Keep track of food consumed for this turn
-
+        while(!pass) {
+            userInput1 = Dialog.promptInt("Which one do you want to try to breed?", "Choose an animal that is on the list!", "Numbers only!", 1, player.ownedAnimal.size() - 1);
+            partnerA = player.ownedAnimal.get(userInput1-1);
+            if(partnerA.offSpringLeft == 0){
+                System.out.println(partnerA.getClass().getSimpleName() + " - " + partnerA.getName() + " can not breed anymore");
+            }
+            else if(userInput1 == index){
+                pass = true;
+            }
+            else{
+                pass = true;
+            }
+        }
+        index = 1;
+        System.out.println("-".repeat(50));
+        System.out.println("These can breed with your " + partnerA.getClass().getSimpleName() + " - " + partnerA.getName() + ": ");
         for(int i = 0; i < player.ownedAnimal.size(); i++){
-            int corn = player.ownedFood.get(0).getFoodAmount();
-            int grass = player.ownedFood.get(1).getFoodAmount();
-            int millet = player.ownedFood.get(2).getFoodAmount();
-            int health = player.ownedAnimal.get(i).getHealth();
-            // Get health needed **
-            // Done, each time animal is fed, health +10
-            // Current health should be updated each time the loop runs
-
-            if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("CHICKEN")
-                    && millet > 0){
-                millet--;
-                player.ownedFood.get(2).setFoodAmount(millet);
-                player.ownedAnimal.get(i).setHealth(health+10);
-                milletConsumed++;
+            if(player.ownedAnimal.get(i).getClass().equals(partnerA.getClass()) && !(player.ownedAnimal.get(i).getGender().equals(partnerA.getGender()))
+            && player.ownedAnimal.get(i).offSpringLeft > 0){
+                System.out.println(index + ". " + player.ownedAnimal.get(i).getClass().getSimpleName() + ". Name: " + player.ownedAnimal.get(i).getName() + ", Health: " + player.ownedAnimal.get(i).getHealth() +
+                        ", Gender: " + player.ownedAnimal.get(i).getGender());
+                partnerBList.add(player.ownedAnimal.get(i));
+                index++;
             }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("COW")
-                    && grass > 0){
-                grass--;
-                player.ownedFood.get(1).setFoodAmount(grass);
-                player.ownedAnimal.get(i).setHealth(health+10);
-                grassConsumed++;
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("Horse")
-                    && grass > 0){
-                grass--;
-                player.ownedFood.get(1).setFoodAmount(grass);
-                player.ownedAnimal.get(i).setHealth(health+10);
-                grassConsumed++;
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("PIG")
-                    && corn > 0){
-                corn--;
-                player.ownedFood.get(0).setFoodAmount(corn);
-                player.ownedAnimal.get(i).setHealth(health+10);
-                cornConsumed++;
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("Sheep")
-                    && millet > 0){
-                grass--;
-                player.ownedFood.get(1).setFoodAmount(grass);
-                player.ownedAnimal.get(i).setHealth(health+10);
-                grassConsumed++;
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("CHICKEN")
-                    && millet == 0){
-                System.out.println("We are out of millet! Your Chicken "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("Cow")
-                    && grass == 0){
-                System.out.println("We are out of grass! Your cow "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("horse")
-                    && grass == 0){
-                System.out.println("We are out of grass! Your horse "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("pig")
-                    && corn == 0){
-                System.out.println("We are out of corn! Your pig "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
-            }
-            else if(player.ownedAnimal.get(i).getClass().getSimpleName().equalsIgnoreCase("sheep")
-                    && grass == 0){
-                System.out.println("We are out of grass! Your sheep "  + player.ownedAnimal.get(i).getName() + " will starve this turn, buy more food!");
-            }
-
-            System.out.println("Animals has been fed");
-            System.out.println("Food consumed:");
-            System.out.println("Corn: " + cornConsumed + " kg");
-            System.out.println("Grass: " + grassConsumed + " kg");
-            System.out.println("Millet: " + milletConsumed + " kg\n");
-            cornConsumed = 0;
-            grassConsumed = 0;
-            milletConsumed = 0;
-            // After displaying the food consumed, reset the tracker to 0 in order to function for next turn
         }
-    }
-    */
-
-    /*
-    private void showOwnedFood(Player player){
-        System.out.println("----------Your food----------");
-        for(int i = 0; i < player.getOwnedFood().size(); i++){
-            System.out.println("Food: " + player.getOwnedFood().get(i) + " " + player.getOwnedFood().get(i).getFoodAmount());
+        if(partnerBList.size() <= 0){
+            System.out.println("You don't have any animal that can breed with " + partnerA.getClass().getSimpleName() + " - " + partnerA.getName());
         }
+        else{
+            System.out.println("Which one should we pair with " + partnerA.getClass().getSimpleName() + " - " + partnerA.getName() + "?");
+            System.out.println("-".repeat(50));
+            userInput1 = Dialog.promptIntWithOutQuestion("Choose an animal that is on the list!","Numbers only!",1,partnerBList.size());
+            Animal partnerB = partnerBList.get(userInput1-1);
+            //Breed Chance will decrease even if failed;
+            partnerA.setOffSpringLeft(partnerA.getOffSpringLeft()-1);
+            partnerB.setOffSpringLeft(partnerB.getOffSpringLeft()-1);
+
+            //start breeding
+            Random random = new Random();
+            String result;
+            String[] oneOrTwo = {"male","female"};
+            result = oneOrTwo[random.nextInt(oneOrTwo.length)];
+            //Here i decided to use same array for rolling if the partners will get an offspring or not
+            //male = we made it, will get offspring, roll again for gender; female = we failed, no offspring;
+
+            if (result.equalsIgnoreCase("male")){
+                result = oneOrTwo[random.nextInt(oneOrTwo.length)];//roll again for gender
+                System.out.println("-".repeat(50));
+                System.out.println("Great! We got an " + result + " offspring!");
+
+                //Here, the offspring will be added to player owned list
+                if(partnerA.getClass().getSimpleName().equalsIgnoreCase("chicken")){
+                    Chicken chicken = new Chicken();
+                    chicken.setGender(result); // had error here because i didn't setGender even tho i rolled and printed the gender
+                    chicken.setHealth(chicken.startingHealth); // Could set health as argument when creating new animal as well
+                    Dialog.enterOrRandomName(chicken);
+                    player.ownedAnimal.add(chicken);
+                }
+                else if(partnerA.getClass().getSimpleName().equalsIgnoreCase("cow")){
+                    Cow cow = new Cow();
+                    cow.setGender(result);
+                    cow.setHealth(cow.startingHealth);
+                    Dialog.enterOrRandomName(cow);
+                    player.ownedAnimal.add(cow);
+                }
+                else if(partnerA.getClass().getSimpleName().equalsIgnoreCase("horse")){
+                    Horse horse = new Horse();
+                    horse.setGender(result);
+                    horse.setHealth(horse.startingHealth);
+                    Dialog.enterOrRandomName(horse);
+                    player.ownedAnimal.add(horse);}
+                else if(partnerA.getClass().getSimpleName().equalsIgnoreCase("pig")){
+                    Pig pig = new Pig();
+                    pig.setGender(result);
+                    pig.setHealth(pig.startingHealth);
+                    Dialog.enterOrRandomName(pig);
+                    player.ownedAnimal.add(pig);
+                }
+                else if(partnerA.getClass().getSimpleName().equalsIgnoreCase("sheep")){
+                    Sheep sheep = new Sheep();
+                    sheep.setGender(result);
+                    sheep.setHealth(sheep.startingHealth);
+                    Dialog.enterOrRandomName(sheep);
+                    player.ownedAnimal.add(sheep);
+                }
+            }
+            else{
+                System.out.println("Oh! The mother didn't get pregnant, we failed.");
+            }
+        }
+        partnerBList.clear();
     }
 
-    private void showOwnedAnimals(Player player){
-        System.out.println("----------Your Animals----------");
-        for(int i = 0; i < player.getOwnedAnimal().size(); i++){
-            System.out.println("Animal: " + player.getOwnedAnimal().get(i).getName());
-            System.out.println("Type: " + player.getOwnedAnimal().get(i).getType());
-            System.out.println("Health: " + player.getOwnedAnimal().get(i).getHealth());
-            System.out.println("");
+    public void sellAnimal(Player player) {
+        int menuInput = 0;
+        while (menuInput != 2) {
+            int index = 1;
+            System.out.println("Your animals: ");
+            if(player.ownedAnimal.size() == 0){
+                System.out.println("You don't own any animal yet!");
+            }
+            else {
+                for (Animal animalInList : player.ownedAnimal) {
+                    System.out.println(index + ". " + animalInList.getClass().getSimpleName() + ". Name: " + animalInList.getName() + ", Health: " + animalInList.getHealth() + ", Gender: " + animalInList.getGender()
+                            + ". Breed chance left: " + animalInList.getOffSpringLeft());
+                    index++;
+                }
+            }
+            menuInput = Dialog.menu("Animal Store", "Sell animal", "Leave store (Your turn will end)");
+
+            switch (menuInput) {
+                case 1 -> {
+                    int userInput1 = Dialog.promptInt("Which animal do you want to sell?", "Choose an animal that is on the list!", "Numbers only!", 1, player.ownedAnimal.size() + 1);
+                    int income = player.ownedAnimal.get(userInput1).getPrice() * (player.ownedAnimal.get(userInput1).getHealth() / 100);
+                    System.out.println("Merchant would pay " + income + " gold");
+                    System.out.println("Do you really want to sell it?");
+                    System.out.println("1. Yes");
+                    System.out.println("2. No");
+                    int userInput2 = Dialog.promptIntWithOutQuestion("Choose an option on the menu!", "Numbers only!", 1, 2);
+                    System.out.println("-".repeat(50));
+                    switch (userInput2) {
+                        case 1 -> {
+                            player.setMoney(player.getMoney() + income);
+                            System.out.println(player.ownedAnimal.get(userInput1).getClass().getSimpleName() + " - " + player.ownedAnimal.get(userInput1).getName() + " understood that this is the last time it will meet its owner," +
+                                    "as it walked by, you could almost see a tear rolling down its face.");
+                            player.ownedAnimal.remove(userInput1 - 1);
+                        }
+                        case 2 -> { }
+                    }
+                }
+                case 2 -> { }
+            }
         }
     }
-
-    public int getRound() {
-        return round;
-    }
-
-    public void ShowPlayerInfo(Player player) {
-        Dialog.clear();
-        System.out.println("Player: " + player.getName());
-        System.out.println("Money: " + player.getMoney());
-        int round = this.getRound();
-        System.out.println("Current Round: " + round);
-        System.out.println("Total Round: " + totalRounds);
-        System.out.println();
-        if (player.getOwnedFood().size() != 0) {
-            this.showOwnedFood(player);
-        }
-
-        if (player.getOwnedAnimal().size() != 0) {
-            this.showOwnedAnimals(player);
-        }
-
-        System.out.println();
-    }*/
 }
