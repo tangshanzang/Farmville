@@ -19,9 +19,12 @@ public class Game implements Serializable {
     int totalRounds, totalPlayers, userInput1, startingFund;
     int round = 1;
     int currentRound = 1;
+    int tradeRound = 0;
     int activePlayer = 0;
     ArrayList<Player> players = new ArrayList<>();
     public Store store = new Store();
+    ArrayList<Animal> animalOnTheWay = new ArrayList<>();
+    Player targetPlayer;
     /*String savePathInString = "";
     String saveSlot = "";*/
 
@@ -131,7 +134,9 @@ public class Game implements Serializable {
         System.out.println("-".repeat(50));
         for (int i = 0; i < totalPlayers; i++) {
             for (Animal animal : players.get(i).ownedAnimal) {
-                players.get(i).setMoney(players.get(i).getMoney() + (animal.getPrice() * (animal.getHealth() / 100)));
+                players.get(i).setMoney(players.get(i).getMoney() +
+                        (int)(Math.round((double)(animal.getPrice() *
+                                animal.getHealth())) / 100.00));
             }
             System.out.println("Player: " + players.get(i).getName());
             System.out.println("Gold: " + players.get(i).getMoney());
@@ -248,6 +253,28 @@ public class Game implements Serializable {
         System.out.println("Gold: " + player.getMoney());
         System.out.println("-".repeat(50));
         decreaseHealthPreTurn(player); // Decrease health each turn
+        if(animalOnTheWay.size() != 0 && targetPlayer.getName().equals(player.getName()) && tradeRound == currentRound){  // Add animals to the list to avoid double health decrease
+            System.out.println("Your animal has arrived");
+            player.ownedAnimal.addAll(animalOnTheWay);
+            animalOnTheWay.clear(); // reset list
+        }
+        else if(animalOnTheWay.size() != 0 && targetPlayer.getName().equals(player.getName()) && tradeRound < currentRound){ // If recorded Trade turn < current turn, meaning it might be a new round, then decrease health before adding to player's list
+            System.out.println("Your animal has arrived");
+            for (int i = 0; i < animalOnTheWay.size(); i++) {
+                Random random = new Random();
+                int number = random.nextInt(30 - 10 + 1) + 10;
+                animalOnTheWay.get(i).setHealth(animalOnTheWay.get(i).getHealth() - number);
+                System.out.println(animalOnTheWay.get(i).getClass().getSimpleName() + " - " + animalOnTheWay.get(i).getName() + "'s health has been decrease by " + number);
+
+                if (animalOnTheWay.get(i).getHealth() <= 0) {
+                    System.out.println(animalOnTheWay.get(i).getClass().getSimpleName() + " - " + animalOnTheWay.get(i).getName() + " died! ");
+                    animalOnTheWay.remove(player.ownedAnimal.get(i));
+                    i--;
+                }
+            }
+            player.ownedAnimal.addAll(animalOnTheWay);
+            animalOnTheWay.clear();
+        }
         Dialog.printPlayerStatus(player); // Show detailed info at round start
         userInput1 = Dialog.menu("What would you like to do?", "Buy new Animals", "Buy new Food", "Feed my Animals",
                 "Breed my Animals", "Sell my Animals","Save Game","Load Game");
@@ -265,7 +292,13 @@ public class Game implements Serializable {
                 breedMyAnimal(player);
             }
             case 5 -> {
+                if (player.ownedAnimal.size() == 0) {
+                    System.out.println("You don't own any animal yet!");
+                    mainGameRound(player);
+                }
+                else{
                 sellAnimal(player);
+                }
             }
             case 6 -> {
                 load1.saveGame();
@@ -442,24 +475,20 @@ public class Game implements Serializable {
 
     public void sellAnimal(Player player) {
         int menuInput = 0;
-        while (menuInput != 2) {
+        while (menuInput != 3) {
             int index = 1;
             System.out.println("Your animals: ");
-            if (player.ownedAnimal.size() == 0) {
-                System.out.println("You don't own any animal yet!");
-            } else {
                 for (Animal animalInList : player.ownedAnimal) {
                     System.out.println(index + ". " + animalInList.getClass().getSimpleName() + ". Name: " + animalInList.getName() + ", Health: " + animalInList.getHealth() + ", Gender: " + animalInList.getGender()
                             + ". Breed chance left: " + animalInList.getOffSpringLeft());
                     index++;
                 }
-            }
-            menuInput = Dialog.menu("Animal Store", "Sell animal", "Leave store (Your turn will end)");
+            menuInput = Dialog.menu("Animal Store", "Sell animal to store", "Sell Animal to other player","Leave store (Your turn will end)");
 
             switch (menuInput) {
                 case 1 -> {
                     int userInput1 = Dialog.promptInt("Which animal do you want to sell?", "Choose an animal that is on the list!", "Numbers only!", 1, player.ownedAnimal.size() + 1);
-                    int income = player.ownedAnimal.get(userInput1).getPrice() * (player.ownedAnimal.get(userInput1).getHealth() / 100);
+                    int income = (int)(Math.round((double)(player.ownedAnimal.get(userInput1-1).getPrice() * (player.ownedAnimal.get(userInput1-1).getHealth()))) / 100.00);
                     System.out.println("Merchant would pay " + income + " gold");
                     System.out.println("Do you really want to sell it?");
                     System.out.println("1. Yes");
@@ -469,7 +498,7 @@ public class Game implements Serializable {
                     switch (userInput2) {
                         case 1 -> {
                             player.setMoney(player.getMoney() + income);
-                            System.out.println(player.ownedAnimal.get(userInput1).getClass().getSimpleName() + " - " + player.ownedAnimal.get(userInput1).getName() + " understood that this is the last time it will meet its owner," +
+                            System.out.println(player.ownedAnimal.get(userInput1-1).getClass().getSimpleName() + " - " + player.ownedAnimal.get(userInput1-1).getName() + " understood that this is the last time it will meet its owner," +
                                     "as it walked by, you could almost see a tear rolling down its face.");
                             player.ownedAnimal.remove(userInput1 - 1);
                         }
@@ -478,8 +507,83 @@ public class Game implements Serializable {
                     }
                 }
                 case 2 -> {
+                    boolean pass = false;
+                    int userInput1 = Dialog.promptInt("Which animal do you want to sell?", "Choose an animal that is on the list!", "Numbers only!", 1, player.ownedAnimal.size());
+                    int income = (int)(Math.round((double)(player.ownedAnimal.get(userInput1-1).getPrice() * (player.ownedAnimal.get(userInput1-1).getHealth()))) / 100.00);
+                    System.out.println("Merchant would pay " + income + " gold, how much do you want to price it?");
+                    int priceSell = Dialog.promptIntWithOutQuestion("Price between 0-999","Numbers only!",0,999);
+                    while(!pass){
+                        System.out.println("Who do you want to make the offer to? Please enter his/her name");
+                        System.out.println("Current active players:");
+                        for(int i = 0; i < players.size();i++){
+                            if(!players.get(i).getName().equals(player.getName())){
+                                System.out.println(players.get(i).getName());
+                            }
+                        }
+                        String name = myScanner.nextLine();
+
+                        if(!isInTheList(name)){
+                            System.out.println(name + " is not a player in the game");
+                        }
+                        else if(!(players.get(playerNameIndex(name)).isPlayerRemainingInGame)){
+                            System.out.println(name + " has gone bankrupt, please select other player");
+                        }
+                        else if(isInTheList(name)){
+                            targetPlayer = players.get(playerNameIndex(name));
+                            System.out.println(targetPlayer.getName() + " would you accept " + player.getName() + "'s " + player.ownedAnimal.get(userInput1-1).getClass().getSimpleName() + "-" + player.ownedAnimal.get(userInput1-1).getName()
+                            + " for " + priceSell + " gold?");
+                            System.out.println("1. Yes");
+                            System.out.println("2. No");
+                            System.out.println("Breed: " + player.ownedAnimal.get(userInput1-1).getClass().getSimpleName() + ". Name: " + player.ownedAnimal.get(userInput1-1).getName() + ", Health: " + player.ownedAnimal.get(userInput1-1).getHealth() + ", Gender: " + player.ownedAnimal.get(userInput1-1).getGender()
+                                    + ". Breed chance left: " + player.ownedAnimal.get(userInput1-1).getOffSpringLeft());
+                            int choice = Dialog.promptIntWithOutQuestion("Choose one from the menu!","Numbers only!",1,2);
+                            if(targetPlayer.getMoney() >= priceSell) {
+                                switch (choice) {
+                                    case 1 -> {
+                                        tradeRound = currentRound;
+                                        player.setMoney(player.getMoney() + priceSell);
+                                        targetPlayer.setMoney(targetPlayer.getMoney() - priceSell);
+                                        Animal animal = player.ownedAnimal.get(userInput1 - 1);
+                                        player.ownedAnimal.remove(userInput1 - 1);
+                                        animalOnTheWay.add(animal);
+                                        System.out.println("Trade has been made! " + animal.getClass().getSimpleName() + "-" + animal.getName() + " will arrive at the start of next turn");
+                                        pass = true;
+                                    }
+                                    case 2 -> {
+                                        System.out.println(targetPlayer.getName() + " has rejected your offer");
+                                        pass = true;
+                                    }
+                                }
+                            }
+                            else{
+                                System.out.println("You don't have enough gold to buy it!");   // Message to the target player
+                                pass = true;
+                            }
+                        }
+                    }
+                }
+                case 3 ->{
+
                 }
             }
         }
+    }
+    public boolean isInTheList(String name){
+        boolean a = false;
+        for(Player player1 : players){
+            if (player1.getName().equalsIgnoreCase(name)){
+                a = true;
+            }
+        }
+        return a;
+    }
+    public int playerNameIndex(String name){
+        int index = 0;
+        for (int i = 0; i < players.size(); i++){
+            if(players.get(i).getName().equalsIgnoreCase(name)){
+                index = i;
+            }
+        }
+        return index;
     }
 }
