@@ -1,9 +1,10 @@
 package com.company;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Store {
+public class Store implements Serializable {
 
     public Store() {
 
@@ -13,7 +14,7 @@ public class Store {
     private Game game;
     int userInput1;
 
-    Scanner myScanner = new Scanner(System.in);
+    private transient Scanner myScanner = new Scanner(System.in);
 
     public void setGame(Game game) {
         this.game = game;
@@ -128,13 +129,13 @@ public class Store {
             player.setMoney(player.getMoney() - totalCost);
             switch (userInput1) {
                 case 1 -> {
-                    player.ownedFood.get(0).setFoodAmount(quantity);
+                    player.ownedFood.get(0).setFoodAmount(player.ownedFood.get(0).getFoodAmount() + quantity);
                 }
                 case 2 -> {
-                    player.ownedFood.get(1).setFoodAmount(quantity);
+                    player.ownedFood.get(1).setFoodAmount(player.ownedFood.get(1).getFoodAmount() + quantity);
                 }
                 case 3 -> {
-                    player.ownedFood.get(2).setFoodAmount(quantity);
+                    player.ownedFood.get(2).setFoodAmount(player.ownedFood.get(2).getFoodAmount() + quantity);
                 }
             }
             System.out.println("Trade has been done\n");

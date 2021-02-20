@@ -1,9 +1,10 @@
 package com.company;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public abstract class Food {
+public abstract class Food implements Serializable {
     int kg;
     int price;
 

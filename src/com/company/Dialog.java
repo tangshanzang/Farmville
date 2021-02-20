@@ -1,8 +1,9 @@
 package com.company;
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
-public class Dialog {
+public class Dialog implements Serializable {
 
     static public Scanner myScanner = new Scanner(System.in);
     static boolean pass = false;
