@@ -310,6 +310,7 @@ public class Game implements Serializable {
                         } else if (animal.getClass().getSimpleName().equalsIgnoreCase("pig") && player.ownedFood.get(0).getFoodAmount() > 0) {
                             player.ownedFood.get(0).setFoodAmount((player.ownedFood.get(0).getFoodAmount() - 1));
                             animal.setHealth((animal.getHealth() + 10));
+                            System.out.println(animal.getClass().getSimpleName() + "-" + animal.getName() + "'s health has been increased by 10");
                             System.out.println("1 kg " + player.ownedFood.get(0).getClass().getSimpleName() + " has been consumed");
                             choice = 4;
                         }
@@ -328,6 +329,7 @@ public class Game implements Serializable {
 
                             player.ownedFood.get(1).setFoodAmount((player.ownedFood.get(1).getFoodAmount() - 1));
                             animal.setHealth((animal.getHealth() + 10));
+                            System.out.println(animal.getClass().getSimpleName() + "-" + animal.getName() + "'s health has been increased by 10");
                             System.out.println("1 kg " + player.ownedFood.get(0).getClass().getSimpleName() + " has been consumed");
                             choice = 4;
                         }
@@ -341,6 +343,7 @@ public class Game implements Serializable {
                         } else if (animal.getClass().getSimpleName().equalsIgnoreCase("chicken") && player.ownedFood.get(2).getFoodAmount() > 0) {
                             player.ownedFood.get(2).setFoodAmount((player.ownedFood.get(2).getFoodAmount() - 1));
                             animal.setHealth((animal.getHealth() + 10));
+                            System.out.println(animal.getClass().getSimpleName() + "-" + animal.getName() + "'s health has been increased by 10");
                             System.out.println("1 kg " + player.ownedFood.get(0).getClass().getSimpleName() + " has been consumed");
                             choice = 4;
                         }
