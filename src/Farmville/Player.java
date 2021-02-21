@@ -1,4 +1,10 @@
-package com.company;
+package Farmville;
+
+import Farmville.Animal.Animal;
+import Farmville.Food.Corn;
+import Farmville.Food.Food;
+import Farmville.Food.Grass;
+import Farmville.Food.Millet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,7 +12,6 @@ import java.util.ArrayList;
 public class Player implements Serializable {
     String name;
     int money;
-    int kg;
     ArrayList<Animal> ownedAnimal;
     ArrayList<Food> ownedFood;
     boolean isPlayerRemainingInGame = true;
@@ -25,14 +30,6 @@ public class Player implements Serializable {
 
     public void setMoney(int money){ this.money = money;}
 
-    public void setFoodAmount(int kg){ this.kg = kg;}
-
     public String getName(){return this.name;}
-
-    public ArrayList<Animal> getOwnedAnimal(){return this.ownedAnimal;}
-
-    public ArrayList<Food> getOwnedFood(){return this.ownedFood;}
-
-    public boolean isPlayerRemainingInGame() {return isPlayerRemainingInGame;}
 
 }

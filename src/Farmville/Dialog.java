@@ -1,16 +1,14 @@
-package com.company;
+package Farmville;
+import Farmville.Animal.Animal;
+import Farmville.Food.Food;
+
 import java.io.Serializable;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 public class Dialog implements Serializable {
 
     static public Scanner myScanner = new Scanner(System.in);
     static boolean pass = false;
-
-    static public void clear() {
-        System.out.println("\n".repeat(60));
-    }
 
     static public String prompt(String question) {
         System.out.println(question);
@@ -163,12 +161,8 @@ public class Dialog implements Serializable {
             int choice = promptInt("Do you want a Male or Female?\n1. Male\n2. Female\n3. Random","Please choose between 1 to 3","Numbers only!",
                     1,3);
             switch (choice) {
-                case 1 -> {
-                    animal.setGender("Male");
-                }
-                case 2 -> {
-                    animal.setGender("Female");
-                }
+                case 1 -> animal.setGender("Male");
+                case 2 -> animal.setGender("Female");
                 case 3 -> {
                     String[] gender = {"Male", "Female"};
                     Random random = new Random();

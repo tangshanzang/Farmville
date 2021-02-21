@@ -1,4 +1,4 @@
-package com.company;
+package Farmville;
 
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -23,9 +23,7 @@ public class SaveLoad implements Serializable {
                 case 1 -> saveSlot = "Save1";
                 case 2 -> saveSlot = "Save2";
                 case 3 -> saveSlot = "Save3";
-                case 4 -> {
-                    pass = true;
-                }
+                case 4 -> pass = true;
             }
             savePathInString = saveSlot + ".ser";
             Path savePath = Paths.get(savePathInString);
@@ -53,6 +51,7 @@ public class SaveLoad implements Serializable {
     }
 
     public void loadGame() {
+        System.out.println("-".repeat(50));
         boolean pass = false;
         while (!pass) {
             System.out.println("Select the save file you would like to load:");
@@ -62,6 +61,7 @@ public class SaveLoad implements Serializable {
             System.out.println("4.Exit ");
             Scanner myScanner = new Scanner(System.in);
             String input = myScanner.nextLine();
+            System.out.println("-".repeat(50));
 
             switch (input) {
                 case "1" -> {
@@ -91,9 +91,7 @@ public class SaveLoad implements Serializable {
                         pass = true;
                     }
                 }
-                case "4" -> {
-                    pass = true;
-                }
+                case "4" -> pass = true;
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.company;
+package Farmville.Food;
 
 public class Corn extends Food{
 

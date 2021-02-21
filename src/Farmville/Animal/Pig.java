@@ -1,4 +1,4 @@
-package com.company;
+package Farmville.Animal;
 
 public class Pig extends Animal{
 

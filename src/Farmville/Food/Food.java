@@ -1,8 +1,6 @@
-package com.company;
+package Farmville.Food;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public abstract class Food implements Serializable {
     int kg;
@@ -19,8 +17,6 @@ public abstract class Food implements Serializable {
     public int getFoodAmount(){ return this.kg;}
 
     public void setFoodAmount(int kg){ this.kg = kg;}
-
-    public int getFoodPrice(){ return this.price;}
 
     public void setFoodPrice(int price){ this.price = price;}
 

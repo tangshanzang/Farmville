@@ -1,13 +1,13 @@
-package com.company;
+package Farmville.Animal;
 
 import java.io.Serializable;
 
 public abstract class Animal implements Serializable {
-    String name;
-    int health, price;
-    int startingHealth = 100;
-    int offSpringLeft;
-    int maxOffSpring;
+    public String name;
+    public int health, price;
+    public int startingHealth = 100;
+    public int offSpringLeft;
+    public int maxOffSpring;
     String gender = "male";
 
     public Animal(){
@@ -43,7 +43,5 @@ public abstract class Animal implements Serializable {
     public int getOffSpringLeft(){return this.offSpringLeft;}
 
     public void setOffSpringLeft(int offSpringLeft){this.offSpringLeft = offSpringLeft;}
-
-    public int getMaxOffSpring(){return maxOffSpring;}
 }
 

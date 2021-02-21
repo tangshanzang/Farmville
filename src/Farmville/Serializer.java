@@ -1,9 +1,9 @@
-package com.company;
+package Farmville;
 
-import java.io.*; // serialization/deserialization
-
+import java.io.*;
+    // serialization/deserialization
     // A helper class to serialize and deserialize data structure
-// (objects, array list of objects etc)
+    // (objects, array list of objects etc)
     public class Serializer {
 
         static public boolean serialize(String filePath, Object data) {
